@@ -1,12 +1,22 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
+import os
+from sqlalchemy import create_engine
 
-app = FastAPI(title="Anomaly Detection Service")
+app = FastAPI()
+
+# This reads from the .env variables injected by Docker
+DATABASE_URL = os.getenv("DATABASE_URL")
+engine = create_engine(DATABASE_URL)
 
 # This defines what the 'input' to our model looks like
 class Transaction(BaseModel):
     transaction_id: str
     amount: float
+
+@app.get("/health")
+def health():
+    return {"status": "connected", "project": os.getenv("PROJECT_NAME")}
 
 @app.get("/")
 def home():
@@ -23,8 +33,5 @@ def predict(data: Transaction):
     }
 
 
-# Automatically pulls from the .env file when run via Docker
-import os
-from sqlalchemy import create_engine
-DB_URL = os.getenv("DATABASE_URL", "postgresql://admin:secret@localhost:5432/fraud_detection")
-engine = create_engine(DB_URL)
+
+
