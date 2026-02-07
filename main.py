@@ -21,3 +21,10 @@ def predict(data: Transaction):
         "prediction": 0,
         "model_version": "baseline_constant_zero"
     }
+
+
+# Automatically pulls from the .env file when run via Docker
+import os
+from sqlalchemy import create_engine
+DB_URL = os.getenv("DATABASE_URL", "postgresql://admin:secret@localhost:5432/fraud_detection")
+engine = create_engine(DB_URL)
