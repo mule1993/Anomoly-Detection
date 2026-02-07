@@ -1,14 +1,14 @@
 version: '3.8'
 
 services:
-  # Our Database Service
   db:
     image: postgres:16
-    container_name: mlops-db
+    # Docker replaces ${PROJECT_NAME} with 'fraud_detector' from your .env
+    container_name: ${PROJECT_NAME}-db
     environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: secret
-      POSTGRES_DB: fraud_detection
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+      POSTGRES_DB: ${DB_NAME}
     ports:
       - "5432:5432"
     volumes:
